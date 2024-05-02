@@ -6,29 +6,30 @@
         <div class="card cascading-right bg-body-tertiary" style="backdrop-filter: blur(30px);">
           <div class="card-body p-5 shadow-5 text-center">
             <h2 class="fw-bold mb-5">Sign up now</h2>
-            <form @submit.prevent="signUp">
+            <form class="needs-validation" novalidate>
 
-
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="email" v-model="name" id="name" class="form-control mb-2" />
-                <label class="form-label" for="form3Example3">Name</label>
+              <div :class="['form-outline', 'mb-4', {'was-validated': usernameInvalid}]">
+                <input type="text" v-model="username" id="username" class="form-control mb-2" required />
+                <label class="form-label" for="username">Name</label>
+                <div class="invalid-feedback">Please enter your name.</div>
               </div>
+
               <!-- Email input -->
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="email" v-model="email" id="form3Example3" class="form-control mb-2" />
-                <label class="form-label" for="form3Example3">Email address</label>
+              <div :class="['form-outline', 'mb-4', {'was-validated': emailInvalid}]">
+                <input type="email" v-model="email" id="email" class="form-control mb-2" required />
+                <label class="form-label" for="email">Email address</label>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
               </div>
 
               <!-- Password input -->
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input type="password" v-model="password" id="form3Example4" class="form-control mb-2" />
-                <label class="form-label" for="form3Example4">Password</label>
+              <div :class="['form-outline', 'mb-4', {'was-validated': passwordInvalid}]">
+                <input type="password" v-model="password" id="password" class="form-control mb-2" required />
+                <label class="form-label" for="password">Password</label>
+                <div class="invalid-feedback">Please enter your password.</div>
               </div>
 
-
-
               <!-- Submit button -->
-              <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+              <button type="submit" class="btn btn-primary btn-block mb-4" @click.prevent="signUp">
                 Sign up
               </button>
 
@@ -52,26 +53,84 @@
 
 <script>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
+    const router = useRouter();
+
     // Data properties
-    const name = ref('');
+    const username = ref('');
     const email = ref('');
     const password = ref('');
-    const subscribeToNewsletter = ref(true); // Initial value for the checkbox
+    const usernameInvalid = ref(false);
+    const emailInvalid = ref(false);
+    const passwordInvalid = ref(false);
+
+    // Method to validate email format
+    const validateEmail = (email) => {
+      // Regular expression for basic email format validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    }
 
     // Method to handle sign up
     const signUp = () => {
-      // Handle sign up logic here
-      console.log('Sign up button clicked');
-    };
+      // Reset validation state
+      usernameInvalid.value = false;
+      emailInvalid.value = false;
+      passwordInvalid.value = false;
+
+      // Validate form fields
+      if (!username.value) {
+        usernameInvalid.value = true;
+      }
+      if (!email.value || !validateEmail(email.value)) {
+        emailInvalid.value = true;
+      }
+      if (!password.value) {
+        passwordInvalid.value = true;
+      }
+
+      // If any field is invalid, stop sign-up process
+      if (usernameInvalid.value || emailInvalid.value || passwordInvalid.value) {
+        return;
+      }
+
+      // Prepare data for the request
+      const userData = {
+        username: username.value,
+        email: email.value,
+        password: password.value,
+      };
+
+      // Make a POST request to your backend API
+      axios.post('http://localhost:8000/register', userData)
+          .then(response => {
+            // Handle successful response
+            console.log('Sign up successful', response.data);
+            // Redirect to home page or show success message
+            router.push('/home');
+          })
+          .catch(error => {
+            // Handle error
+            if (error.response && error.response.status === 400 && error.response.data.detail === "Email already registered") {
+              alert('Email is already registered. Please use a different email.');
+            } else {
+              console.error('Sign up failed', error);
+              alert('An error occurred during sign up.');
+            }
+          });
+    }
 
     return {
-      name,
+      username,
       email,
       password,
-      subscribeToNewsletter,
+      usernameInvalid,
+      emailInvalid,
+      passwordInvalid,
       signUp
     };
   }
