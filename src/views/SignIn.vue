@@ -84,7 +84,7 @@ export default {
             console.log('Sign in successful', response.data);
 
             // Redirect to home page or wherever needed after successful login
-            router.push('/home');
+            router.push('/products');
           })
           .catch(error => {
             // Handle authentication error

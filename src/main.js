@@ -5,12 +5,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // import LandingPage from './components/LandingPage.vue';
-import SignIn from './components/SignIn.vue';
-import SignUp from './components/SignUp.vue';
+import SignIn from './views/SignIn.vue';
+import SignUp from './views/SignUp.vue';
 import LandingPage from "@/components/LandingPage.vue";
-import NavBar from './components/NavBar.vue';
+// import NavBar from './components/NavBar.vue';
 import '@fortawesome/fontawesome-free/css/all.css';
 import axios from "axios";
+import ProductsPage from "@/views/ProductsPage.vue";
 
 axios.defaults.baseURL = "http://localhost:8000"
 // *********** Routes ****************
@@ -18,7 +19,7 @@ const routes = [
     { path: '/', component: LandingPage },
     { path: '/login', component: SignIn },
     { path: '/signup', component: SignUp },
-    {path: '/home', component: NavBar },
+    {path: '/products', component: ProductsPage },
     // Default route if no other route matches
     {
         path: '/:catchAll(.*)', // Defining catch-all route

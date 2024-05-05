@@ -17,17 +17,24 @@
               <i class="uil uil-user me-1"></i>{{ userName }}
             </router-link>
           </li>
+<!--          <li class="nav-item">-->
+<!--            <router-link to="/contact" class="nav-link">Contact Us</router-link>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <router-link to="/about" class="nav-link">About</router-link>-->
+<!--          </li>-->
+
           <li class="nav-item">
-            <router-link to="/contact" class="nav-link">Contact Us</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/about" class="nav-link">About</router-link>
+             <router-link to="/shopping-cart" class="nav-link" >
+              <img src="@/assets/icons/shopping-cart.svg" alt="Logout" class="icon-svg" /> ShoppingCart
+             </router-link>
           </li>
           <li class="nav-item">
             <a @click="logout" class="nav-link"> <!-- Modified to call logout method on click -->
               <img src="@/assets/icons/logout.svg" alt="Logout" class="icon-svg" /> Logout
             </a>
           </li>
+
         </ul>
       </div>
     </div>

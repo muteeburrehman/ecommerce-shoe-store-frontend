@@ -111,7 +111,7 @@ export default {
             // Handle successful response
             console.log('Sign up successful', response.data);
             // Redirect to home page or show success message
-            router.push('/home');
+            router.push('/products');
           })
           .catch(error => {
             // Handle error
